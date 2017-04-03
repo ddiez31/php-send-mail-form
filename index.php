@@ -13,24 +13,49 @@
 
 <body>
 
-    <form class="ui form">
-        <div class="ui form">
+    <form class="ui form" method="post">
+        <div class="ui raised very padded text container segment">
             <div class="ui form success">
                 <div class="field">
-                    <label>E-mail</label>
-                    <input type="email" placeholder="joe@schmoe.com">
+                    <label>Send mail to:</label>
+                    <input type="email" name="email" placeholder="joe@schmoe.com">
+                    <?php
+                    if (isset($_POST['email'])) {
+                        $_POST['email'] = htmlspecialchars($_POST['email']);
+                        if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email'])) {
+                            echo 'Adress mail '.$_POST['email'].' is correct!';
+                        } else {
+                            echo 'Adress mail '.$_POST['email'].' invalid, please try again!';
+                        }
+                    }
+                    ?>
                 </div>
             </div>
-
-            <div class="field">
-                <label>Short Text</label>
-                <textarea rows="2"></textarea>
+            <div class="ui form success">
+                <div class="field">
+                    <label>Your message:</label>
+                    <textarea rows="2" name="message" maxlength="500" placeholder="Your message"></textarea>
+                    <?php
+                    $message = substr($_POST['message'], 0, 500); 
+                    $message = wordwrap($message, 500, "\r\n");
+                    if (strlen($message) > 500) {
+                        echo 'Your message is too long';
+                    }
+                    ?>
+                </div>
+                <button class="ui button" name="send" type="submit">Send</button>
             </div>
         </div>
-        <button class="ui button" type="submit">Submit</button>
     </form>
 
 
+    <?php
+    $subject = 'test mail';
+    $dest = $_POST['email'];
+    if (isset($_POST['send'])) {
+        mail($dest, $subject, $message);
+    }
+    ?>
 
 </body>
 
