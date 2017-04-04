@@ -23,7 +23,7 @@
                     if (isset($_POST['email'])) {
                         $_POST['email'] = htmlspecialchars($_POST['email']);
                         if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email'])) {
-                            echo 'Adress mail '.$_POST['email'].' is correct!';
+                            // echo 'Adress mail '.$_POST['email'].' is correct!';
                         } else {
                             echo 'Adress mail '.$_POST['email'].' invalid, please try again!';
                         }
@@ -33,14 +33,25 @@
             </div>
             <div class="ui form success">
                 <div class="field">
+                    <label>Subject:</label>
+                    <input type="text" name="subject" placeholder="subject">
                     <label>Your message:</label>
                     <textarea rows="2" name="message" maxlength="500" placeholder="Your message"></textarea>
                     <?php
-                    $message = substr($_POST['message'], 0, 500); 
-                    $message = wordwrap($message, 500, "\r\n");
-                    if (strlen($message) > 500) {
-                        echo 'Your message is too long';
-                    }
+                       if (isset($_POST['send'])) {
+                            $dest = $_POST['email'];
+                            $subject = $_POST['subject'];
+                            $message = substr($_POST['message'], 0, 500); 
+                            $message = wordwrap($message, 500, "\r\n");
+                            if (strlen($message) > 500) {
+                                echo 'Your message is too long';
+                            };
+                            if (mail($dest, $subject, $message)) {
+                                echo("<p>Email successfully sent!</p>");
+                            } else {
+                                echo("<p>Email delivery failed…</p>");
+                            };
+                        };
                     ?>
                 </div>
                 <button class="ui button" name="send" type="submit">Send</button>
@@ -49,14 +60,7 @@
     </form>
 
 
-    <?php
-    $subject = 'test mail';
-    $dest = $_POST['email'];
-    if (isset($_POST['send'])) {
-        mail($dest, $subject, $message);
-    }
-    ?>
-
 </body>
 
 </html>
+
