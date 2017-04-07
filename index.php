@@ -41,8 +41,8 @@ require('src/Emojione.php');
                     <input type="text" name="subject" placeholder="subject">
                     <label>Your message:</label>
                     <textarea rows="2" name="message" maxlength="500" placeholder="Your message, emoji accept"></textarea>
-                    <!--<label for="file">File:</label>
-                    <input type="file" name="file">-->
+                    <label for="file">File:</label>
+                    <input type="file" name="file">
                     <?php
                         Emojione\Emojione::$imageType = 'png';
                         Emojione\Emojione::$imagePathPNG = 'https://cdn.jsdelivr.net/emojione/assets/png/';
@@ -59,15 +59,15 @@ require('src/Emojione.php');
                                 if (strlen($message) > 500) {
                                     echo 'Your message is too long';
                                 };
-                                // $uploaddir = 'upload/';
-                                // $uploadfile = $uploaddir.basename($_FILES['file']['name']);
-                                // echo '<pre>';
-                                // if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-                                //     echo "File ".$_FILES['file']['name']." success upload.\n";
-                                // } else {
-                                //     echo "Attack possible by uploading file : ";
-                                //     echo "File name : '".$_FILES['file']['tmp_name']."'.";
-                                // };
+                                $uploaddir = 'upload/';
+                                $uploadfile = $uploaddir.basename($_FILES['file']['name']);
+                                echo '<pre>';
+                                if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+                                    echo "File ".$_FILES['file']['name']." success upload.\n";
+                                } else {
+                                    echo "Attack possible by uploading file : ";
+                                    echo "File name : '".$_FILES['file']['tmp_name']."'.";
+                                };
 
                                 $_POST['email'] = htmlspecialchars($_POST['email']);
                                 foreach($dest as $mail) {
